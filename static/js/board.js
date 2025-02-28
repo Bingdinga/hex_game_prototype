@@ -1,5 +1,5 @@
 /**
- * Hexagonal board manager
+ * Hexagonal board manager - Fixed positioning
  */
 class HexBoard {
     constructor(element, cols = 10, rows = 10) {
@@ -18,21 +18,27 @@ class HexBoard {
     }
     
     createGrid() {
-        const hexHeight = this.hexSize;
-        const hexWidth = this.hexSize;
-        const verticalSpace = hexHeight * 0.75;
+        // Calculate hex dimensions for proper positioning
+        const hexWidth = this.hexSize; // Width of hex
+        const hexHeight = this.hexSize; // Height of hex
+        
+        // For a proper hexagonal grid:
+        const horizontalDistance = hexWidth * 0.75; // Distance between columns
+        const verticalDistance = hexHeight * 0.87; // Distance between rows
         
         for (let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
                 const hex = document.createElement('div');
                 hex.className = 'hexagon';
                 
-                // Offset every other row to create a hexagonal grid pattern
-                const xPos = col * hexWidth * 0.75;
-                const yPos = row * verticalSpace;
-                const offset = (row % 2 === 0) ? 0 : (hexWidth * 0.375);
+                // Offset every other row for proper hexagonal packing
+                const xOffset = (row % 2 === 0) ? 0 : (horizontalDistance / 2);
                 
-                hex.style.left = `${xPos + offset}px`;
+                // Calculate position
+                const xPos = col * horizontalDistance + xOffset;
+                const yPos = row * verticalDistance;
+                
+                hex.style.left = `${xPos}px`;
                 hex.style.top = `${yPos}px`;
                 
                 // Add coordinate display for reference
@@ -63,16 +69,20 @@ class HexBoard {
     
     // Convert pixel position to nearest hex coordinates
     pixelToHex(x, y) {
-        const hexHeight = this.hexSize;
+        // Calculate hex dimensions
         const hexWidth = this.hexSize;
-        const verticalSpace = hexHeight * 0.75;
+        const hexHeight = this.hexSize;
+        const horizontalDistance = hexWidth * 0.75;
+        const verticalDistance = hexHeight * 0.87;
         
-        // Approximate row based on y position
-        let row = Math.floor(y / verticalSpace);
+        // Calculate approximate row index
+        let row = Math.round(y / verticalDistance);
         
-        // Adjust for offset in odd rows
-        const offset = (row % 2 === 0) ? 0 : (hexWidth * 0.375);
-        let col = Math.floor((x - offset) / (hexWidth * 0.75));
+        // Adjust x based on whether we're in an odd or even row
+        const adjustedX = (row % 2 === 0) ? x : x - (horizontalDistance / 2);
+        
+        // Calculate approximate column index
+        let col = Math.round(adjustedX / horizontalDistance);
         
         // Ensure coordinates are within bounds
         row = Math.max(0, Math.min(row, this.rows - 1));
