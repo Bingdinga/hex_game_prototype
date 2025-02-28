@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to Hex Game{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">Create New Game</div>
+            <div class="card-body">
+                <form action="{{ url_for('create_room') }}" method="post">
+                    <div class="mb-3">
+                        <label for="create-username" class="form-label">Your Name</label>
+                        <input type="text" class="form-control" id="create-username" name="username" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Game</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Join Existing Game</div>
+            <div class="card-body">
+                <form action="{{ url_for('join_existing_room') }}" method="post">
+                    <div class="mb-3">
+                        <label for="join-username" class="form-label">Your Name</label>
+                        <input type="text" class="form-control" id="join-username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="room-id" class="form-label">Room Code</label>
+                        <input type="text" class="form-control" id="room-id" name="room_id" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Join Game</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">About Hex Game</div>
+            <div class="card-body">
+                <p>Welcome to Hex Game, a collaborative hexagonal game board application where you can:</p>
+                <ul>
+                    <li>Create or join game rooms</li>
+                    <li>Interact with a hexagonal game board</li>
+                    <li>Move tokens through drag and drop</li>
+                    <li>Chat with other players in real-time</li>
+                </ul>
+                <p>Create a new game or join an existing one to get started!</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
