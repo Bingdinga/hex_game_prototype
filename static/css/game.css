@@ -23,7 +23,7 @@
     justify-content: center;
     cursor: pointer;
     transition: background-color 0.2s;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
 }
 
 .hexagon:hover {
@@ -45,15 +45,20 @@
     height: 40px;
     border-radius: 50%;
     position: absolute;
-    cursor: move;
+    cursor: grab;
     z-index: 10;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    transition: box-shadow 0.2s;
+    transition: box-shadow 0.2s, transform 0.05s;
+    touch-action: none; /* Important for interact.js on touch devices */
 }
 
 .token:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     z-index: 20;
+}
+
+.token:active {
+    cursor: grabbing;
 }
 
 .token-red {

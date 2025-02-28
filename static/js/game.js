@@ -18,6 +18,10 @@ class GameManager {
         // Token templates
         this.tokenTemplates = document.getElementById('token-templates');
         
+        // Track if we're adding a token
+        this.addingToken = false;
+        this.addingTokenType = null;
+        
         // Debug mode
         this.debug = true; // Set to true to enable console logging
         
@@ -26,7 +30,7 @@ class GameManager {
     
     log(...args) {
         if (this.debug) {
-            console.log(...args);
+            console.log('[GameManager]', ...args);
         }
     }
     
@@ -81,10 +85,12 @@ class GameManager {
             this.handleTokenRemoved(data);
         });
         
-        // Setup drag and drop for tokens
-        this.setupDragAndDrop();
+        this.log('Game manager initialized, setting up drag and drop');
         
-        this.log('Game manager initialized');
+        // Set up drag and drop after a short delay to ensure all elements are loaded
+        setTimeout(() => {
+            this.setupDragAndDrop();
+        }, 500);
     }
     
     updateUsersList(users) {
@@ -129,6 +135,9 @@ class GameManager {
                 this.createToken(tokenId, tokenData.type, tokenData.position);
             });
         }
+        
+        // Reapply drag and drop to all tokens
+        this.setupDragAndDrop();
     }
     
     startAddToken() {
@@ -182,7 +191,11 @@ class GameManager {
     
     handleTokenAdded(data) {
         this.log(`Handling token added: ${JSON.stringify(data)}`);
-        this.createToken(data.token_id, data.token_type, data.position);
+        const token = this.createToken(data.token_id, data.token_type, data.position);
+        if (token) {
+            // Apply draggable behavior to new token
+            this.applyDraggable(token);
+        }
     }
     
     handleTokenMoved(data) {
@@ -234,23 +247,22 @@ class GameManager {
         }
     }
     
-    setupDragAndDrop() {
-        this.log('Setting up drag and drop');
-        
-        // Use interact.js for drag and drop
-        interact('.token').draggable({
+    applyDraggable(token) {
+        // Apply interact.js draggable to a single token
+        interact(token).draggable({
             inertia: true,
+            autoScroll: true,
             modifiers: [
                 interact.modifiers.restrictRect({
                     restriction: 'parent',
                     endOnly: true
                 })
             ],
-            autoScroll: true,
             
             listeners: {
                 start: event => {
-                    this.log('Drag started', event.target.dataset.id);
+                    this.log('Drag started for token', event.target.dataset.id);
+                    event.target.classList.add('dragging');
                 },
                 
                 move: event => {
@@ -272,6 +284,8 @@ class GameManager {
                     const target = event.target;
                     const tokenId = target.dataset.id;
                     this.log(`Drag ended for token ${tokenId}`);
+                    
+                    target.classList.remove('dragging');
                     
                     // Get the token's center position
                     const rect = target.getBoundingClientRect();
@@ -301,12 +315,28 @@ class GameManager {
                         this.socketManager.moveToken(tokenId, hexCoord);
                     } else {
                         this.log('Token position unchanged, not sending update');
+                        // Reset token to its original position
+                        const originalHexCenter = this.board.getHexCenter(
+                            parseInt(target.dataset.currentCol), 
+                            parseInt(target.dataset.currentRow)
+                        );
+                        if (originalHexCenter) {
+                            target.style.left = `${originalHexCenter.x - 20}px`;
+                            target.style.top = `${originalHexCenter.y - 20}px`;
+                        }
                     }
                 }
             }
         });
+    }
+    
+    setupDragAndDrop() {
+        this.log('Setting up drag and drop for all tokens');
         
-        this.log('Drag and drop setup complete');
+        // Apply draggable behavior to all existing tokens
+        this.tokens.forEach((token) => {
+            this.applyDraggable(token);
+        });
     }
 }
 
