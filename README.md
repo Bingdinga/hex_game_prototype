@@ -4,12 +4,20 @@ A real-time collaborative application featuring a hexagonal game board where mul
 
 ## Features
 
-- Hexagonal grid game board
-- Drag-and-drop token movement
+- Hexagonal grid game board with pointy-top hexagons in a perfect tiling pattern
+- Drag-and-drop token movement with snap-to-hex functionality
 - Real-time multiplayer interaction
 - Chat functionality
 - Room-based gameplay
 - Built with Flask, SocketIO, and Gunicorn
+
+## Recent Improvements
+
+- **Improved Hexagonal Grid**: Implemented a proper pointy-top hexagonal tiling pattern
+- **Enhanced Drag & Drop**: Replaced interact.js with a pure DOM-based dragging solution
+- **Responsive Token Snapping**: Tokens now smoothly snap to the nearest hex when released
+- **Debug Tools**: Added debugging tools accessible via Ctrl+Shift+Q or the debug button
+- **Visual Improvements**: Refined token and hexagon styling for better visual appearance
 
 ## Project Structure
 
@@ -23,12 +31,14 @@ hex_game/
 ├── static/            # Static files
 │   ├── css/
 │   │   ├── main.css
-│   │   └── game.css
+│   │   └── game.css   # Styling for the game board and tokens
 │   ├── js/
 │   │   ├── board.js   # Hexagonal grid handling
 │   │   ├── socket.js  # Socket.IO client-side handling
 │   │   ├── game.js    # Game logic
-│   │   └── chat.js    # Chat functionality
+│   │   ├── token-drag.js # Token dragging functionality
+│   │   ├── chat.js    # Chat functionality
+│   │   └── debug.js   # Debugging utilities
 │   └── images/
 ├── templates/         # Jinja2 templates
 │   ├── base.html      # Base template
@@ -105,12 +115,34 @@ The application will be available at http://0.0.0.0:8000/
 
 3. **Game Board Interaction**:
    - Click "Add Token" to place a token on the board
-   - Drag tokens to move them
+   - Click and drag tokens to move them
+   - Tokens will snap to the nearest hex when released
    - All changes are synchronized in real-time with other users
 
 4. **Chat**:
    - Type a message in the chat box
    - Press Enter or click "Send" to share it with others in the room
+
+5. **Debugging**:
+   - Press Ctrl+Shift+Q or click the debug button in the bottom-right corner to toggle the debug panel
+   - The debug panel shows detailed logging information for troubleshooting
+
+## Technical Details
+
+### Hexagonal Grid
+
+The application uses a pointy-top hexagonal grid with the following characteristics:
+- Hexagons are arranged in a proper tiling pattern with no gaps
+- Each hex has a height of 60px and a width of 54px
+- Odd-numbered rows are offset horizontally by half a hex width
+
+### Token Dragging
+
+Tokens can be dragged using the following approach:
+- Pure DOM events (mousedown, mousemove, mouseup, and touch equivalents)
+- Tokens snap to the nearest hex when released
+- Visual feedback during dragging (scaling and shadow effects)
+- Smooth animation when snapping
 
 ## License
 
@@ -122,4 +154,3 @@ This project is open-source and available under the MIT License.
 - [Flask-SocketIO](https://flask-socketio.readthedocs.io/)
 - [Gunicorn](https://gunicorn.org/)
 - [Eventlet](https://eventlet.net/)
-- [interact.js](https://interactjs.io/)
