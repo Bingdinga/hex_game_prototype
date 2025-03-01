@@ -20,7 +20,7 @@
             <div class="card-body">
                 <div id="game-board" class="hex-board"></div>
                 <div class="alert alert-info">
-                    <small>Tip: Click "Add Token" and then click on a hex to place a token. Drag tokens to move them.</small>
+                    <small>Tip: Click "Add Token" and then click on a hex to place a token. Click and drag tokens to move them - they will snap to the nearest hex when released.</small>
                 </div>
             </div>
         </div>
@@ -73,7 +73,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/interact.js/dist/interact.min.js"></script>
 <script>
     // Pass data from Flask to JavaScript
     const ROOM_ID = "{{ room_id }}";
@@ -81,6 +80,7 @@
 </script>
 <script src="{{ url_for('static', filename='js/board.js') }}"></script>
 <script src="{{ url_for('static', filename='js/socket.js') }}"></script>
+<script src="{{ url_for('static', filename='js/token-drag.js') }}"></script>
 <script src="{{ url_for('static', filename='js/game.js') }}"></script>
 <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 <script src="{{ url_for('static', filename='js/debug.js') }}"></script>

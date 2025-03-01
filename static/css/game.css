@@ -13,17 +13,20 @@
 /* Hexagon Grid Styling */
 .hexagon {
     position: absolute;
-    width: 60px;
-    height: 52px; /* Adjusted for proper hexagon ratio */
+    /* Making hexagons slightly wider for better appearance */
+    width: 54px; /* Increased from 51.96px for visual balance */
+    height: 60px;
     background-color: white;
-    /* Use clip-path to create hexagon shape */
-    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    /* Pointy-top hexagon with perfect angles */
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: background-color 0.2s;
-    border: 1px solid #ddd;
+    border: 1px solid rgba(0,0,0,0.1);
+    margin: 0; /* Ensure no margin */
+    box-sizing: border-box; /* Include border in size calculation */
 }
 
 .hexagon:hover {
@@ -48,17 +51,29 @@
     cursor: grab;
     z-index: 10;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    transition: box-shadow 0.2s, transform 0.05s;
-    touch-action: none; /* Important for interact.js on touch devices */
+    touch-action: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .token:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     z-index: 20;
+    transform: scale(1.05);
 }
 
-.token:active {
+.token:active, .token.dragging {
     cursor: grabbing;
+    z-index: 100;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    transform: scale(1.1);
+}
+
+/* Animation for snapping */
+.token-snapping {
+    transition: left 0.2s ease-out, top 0.2s ease-out;
 }
 
 .token-red {

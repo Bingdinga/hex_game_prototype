@@ -18,9 +18,9 @@ class DebugHelper {
         this.container.style.display = 'none';
         document.body.appendChild(this.container);
         
-        // Add toggle keyboard shortcut (Ctrl+Shift+D)
+        // Add toggle keyboard shortcut (Ctrl+Shift+Q)
         document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+            if (e.ctrlKey && e.shiftKey && e.key === 'Q') {
                 this.toggle();
                 e.preventDefault();
             }
@@ -36,7 +36,7 @@ class DebugHelper {
             this.logToDisplay(args);
         };
         
-        console.log('Debug helper initialized. Press Ctrl+Shift+D to toggle debug display.');
+        console.log('Debug helper initialized. Press Ctrl+Shift+Q to toggle debug display.');
     }
     
     logToDisplay(args) {
